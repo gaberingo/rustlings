@@ -1,15 +1,14 @@
-// A list of scores (one per line) of a soccer match is given. Each line is of
-// the form "<team_1_name>,<team_2_name>,<team_1_goals>,<team_2_goals>"
-// Example: "England,France,4,2" (England scored 4 goals, France 2).
+// Daftar skor (satu per baris) dari pertandingan sepak bola diberikan. Setiap baris memiliki format
+// "<nama_tim_1>,<nama_tim_2>,<gol_tim_1>,<gol_tim_2>"
+// Contoh: "England,France,4,2" (England mencetak 4 gol, France 2 gol).
 //
-// You have to build a scores table containing the name of the team, the total
-// number of goals the team scored, and the total number of goals the team
-// conceded.
+// Anda harus membuat tabel skor yang berisi nama tim, total gol yang dicetak tim,
+// dan total gol yang kebobolan tim tersebut.
 
 use std::collections::HashMap;
 
 // A structure to store the goal details of a team.
-#[derive(Default)]
+#[derive(Default, Debug)]
 struct TeamScores {
     goals_scored: u8,
     goals_conceded: u8,
@@ -31,6 +30,17 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
         // Keep in mind that goals scored by team 1 will be the number of goals
         // conceded by team 2. Similarly, goals scored by team 2 will be the
         // number of goals conceded by team 1.
+        
+        let teamscores1 = scores.entry(team_1_name).or_default();
+        teamscores1.goals_scored += team_1_score;
+        teamscores1.goals_conceded += team_2_score;
+        
+        let teamscores2 = scores.entry(team_2_name).or_default();
+        teamscores2.goals_scored += team_2_score;
+        teamscores2.goals_conceded += team_1_score;
+
+
+
     }
 
     scores
@@ -38,6 +48,8 @@ fn build_scores_table(results: &str) -> HashMap<&str, TeamScores> {
 
 fn main() {
     // You can optionally experiment here.
+    let scores = build_scores_table("England,France,3,2");
+    dbg!(scores);
 }
 
 #[cfg(test)]
